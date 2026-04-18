@@ -1,0 +1,75 @@
+{
+  "name": "frametamer",
+  "version": "0.1.0",
+  "description": "AI-powered video editor using Claude",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node dev.js",
+    "build:frontend": "cd ../frontend && npm run build",
+    "build:backend": "cd ../backend-node && npm run build",
+    "build:all": "npm run build:frontend && npm run build:backend",
+    "build": "npm run build:all && electron-builder",
+    "pack": "electron-builder --dir",
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "com.frametamer.app",
+    "productName": "FrameTamer",
+    "copyright": "Copyright 2026 FrameTamer",
+    "icon": "build/icon.icns",
+    "mac": {
+      "category": "public.app-category.video",
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64"]
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Video"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "server/**/*",
+      "dist/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend-node/dist",
+        "to": "server",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../frontend/dist",
+        "to": "dist",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/**/*.node"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^27.3.11",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "uuid": "^13.0.0"
+  }
+}
